@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Admin Panel - AstridMart')</title>
+    <title>@yield('title', 'Admin Panel - UMKMART')</title>
     
     <!-- Google Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -248,7 +248,7 @@
         </main>
         
         <footer class="bg-white dark:bg-slate-950 border-t border-slate-150 dark:border-slate-800 py-4 text-center text-xs text-slate-400 mt-auto">
-            &copy; 2026 AstridMart. Dashboard Administrasi Prototipe UMKM.
+            &copy; 2026 UMKMART. Dashboard Administrasi Prototipe UMKM.
         </footer>
     </div>
     

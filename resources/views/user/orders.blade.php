@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Riwayat Belanja - AstridMart')
+@section('title', 'Riwayat Belanja - UMKMART')
 
 @section('content')
 <h1 class="text-2xl font-extrabold text-slate-800 dark:text-white mb-6 flex items-center gap-2 text-left">
@@ -118,7 +118,7 @@
         <div class="py-12 text-center">
             <span class="material-icons text-slate-300 dark:text-slate-750 text-5xl">receipt_long</span>
             <h3 class="text-sm font-bold text-slate-800 dark:text-white mt-2">Belum Ada Transaksi</h3>
-            <p class="text-[10px] text-slate-400 max-w-xs mx-auto mt-1">Anda belum pernah melakukan transaksi pembelian di AstridMart.</p>
+            <p class="text-[10px] text-slate-400 max-w-xs mx-auto mt-1">Anda belum pernah melakukan transaksi pembelian di UMKMART.</p>
         </div>
     @endif
 </div>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'AstridMart - E-Commerce UMKM')</title>
+    <title>@yield('title', 'UMKMART - E-Commerce UMKM')</title>
     
     <!-- Google Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -90,7 +90,7 @@
     <footer class="hidden md:block bg-white dark:bg-slate-950 border-t border-slate-100 dark:border-slate-850 py-8 text-center text-sm text-slate-500 dark:text-slate-400 mt-auto">
         <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
-                <span class="font-bold text-emerald-600 dark:text-emerald-400">AstridMart</span> &copy; 2026. Prototipe E-Commerce UMKM.
+                <span class="font-bold text-slate-800 dark:text-white">UMK</span><span class="font-bold text-emerald-600 dark:text-emerald-400">MART</span> &copy; 2026. Prototipe E-Commerce UMKM.
             </div>
             <div class="flex gap-6">
                 <a href="#" class="hover:text-emerald-600">Tentang Kami</a>

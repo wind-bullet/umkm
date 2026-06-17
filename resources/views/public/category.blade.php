@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Kategori ' . $category->name . ' - AstridMart')
+@section('title', 'Kategori ' . $category->name . ' - UMKMART')
 
 @section('content')
 <!-- Category Header -->

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'AstridMart - Belanja Produk UMKM Terbaik')
+@section('title', 'UMKMART - Belanja Produk UMKM Terbaik')
 
 @section('content')
 <!-- Hero Section -->
@@ -10,12 +10,12 @@
     <div class="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-teal-400/20 blur-3xl"></div>
     
     <div class="relative z-10 px-8 py-16 md:p-20 max-w-2xl flex flex-col items-start gap-4">
-        <span class="bg-emerald-500/30 text-emerald-300 font-extrabold text-xs uppercase tracking-widest px-3.5 py-1 rounded-full border border-emerald-400/20">Prototipe AstridMart</span>
+        <span class="bg-emerald-500/30 text-emerald-300 font-extrabold text-xs uppercase tracking-widest px-3.5 py-1 rounded-full border border-emerald-400/20">Prototipe UMKMART</span>
         <h1 class="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight text-white">
             Dukung Produk Lokal, Belanja dari UMKM
         </h1>
         <p class="text-emerald-100/90 text-sm md:text-base leading-relaxed max-w-lg">
-            Temukan barang fashion, aksesoris premium, jajanan kuliner nusantara, dan voucher digital menarik hanya di AstridMart.
+            Temukan barang fashion, aksesoris premium, jajanan kuliner nusantara, dan voucher digital menarik hanya di UMKMART.
         </p>
         <a href="#katalog-section" class="mt-4 bg-white text-emerald-800 hover:bg-emerald-50 font-bold py-3 px-6 rounded-full transition-all duration-300 shadow-lg flex items-center gap-2">
             <span>Mulai Belanja</span>

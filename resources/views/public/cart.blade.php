@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Keranjang Belanja - AstridMart')
+@section('title', 'Keranjang Belanja - UMKMART')
 
 @section('content')
 <h1 class="text-2xl font-extrabold text-slate-800 dark:text-white mb-6 flex items-center gap-2 text-left">
@@ -18,7 +18,7 @@
                     <div class="bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-850 p-4 rounded-3xl flex flex-col sm:flex-row items-center gap-4 shadow-sm relative">
                         <!-- Product Image -->
                         <div class="w-20 h-20 rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-900 flex-shrink-0">
-                            <img src="/desain_sample/screen1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/150x150?text=AstridMart'">
+                            <img src="/desain_sample/screen1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/150x150?text=UMKMART'">
                         </div>
                         
                         <!-- Name & Category -->

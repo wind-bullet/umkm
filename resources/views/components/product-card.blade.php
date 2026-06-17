@@ -10,7 +10,7 @@
     <!-- Image -->
     <div class="relative aspect-square overflow-hidden bg-slate-100 dark:bg-slate-900">
         <!-- Overlay for hover zoom -->
-        <img src="{{ $imageUrl }}" alt="{{ $product->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x400?text=AstridMart'">
+        <img src="{{ $imageUrl }}" alt="{{ $product->name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.src='https://placehold.co/400x400?text=UMKMART'">
         
         <!-- Category Badge -->
         <span class="absolute top-3 left-3 bg-emerald-600/90 text-white font-bold text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full backdrop-blur-sm">

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $product->name . ' - AstridMart')
+@section('title', $product->name . ' - UMKMART')
 
 @section('content')
 <!-- Breadcrumb -->
@@ -37,7 +37,7 @@
             }
         @endphp
         <div class="aspect-square rounded-3xl overflow-hidden bg-slate-100 dark:bg-slate-950 border border-slate-150 dark:border-slate-850">
-            <img src="{{ $imageUrl }}" alt="{{ $product->name }}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x600?text=AstridMart'">
+            <img src="{{ $imageUrl }}" alt="{{ $product->name }}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x600?text=UMKMART'">
         </div>
     </div>
     
@@ -105,6 +105,12 @@
                         <span class="material-icons text-sm">shopping_cart</span>
                         <span>Tambah ke Keranjang</span>
                     </button>
+                    
+                    <!-- Beli Langsung Button -->
+                    <button type="submit" formaction="{{ route('buy_now') }}" class="flex-grow bg-slate-900 hover:bg-black dark:bg-slate-800 dark:hover:bg-slate-700 text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-300 shadow-lg flex items-center justify-center gap-2">
+                        <span class="material-icons text-sm">flash_on</span>
+                        <span>Beli Langsung</span>
+                    </button>
                 </form>
                 <p class="text-[10px] text-slate-400 mt-2 font-semibold flex items-center gap-1">
                     <span class="material-icons text-xs text-emerald-500">check_circle</span> 
@@ -171,7 +177,7 @@
             @forelse($relatedProducts as $rel)
                 <a href="{{ route('product.detail', $rel->id) }}" class="flex items-center gap-3 p-3 bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-850 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
                     <div class="w-16 h-16 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-900 flex-shrink-0">
-                        <img src="/desain_sample/screen1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100?text=AstridMart'">
+                        <img src="/desain_sample/screen1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100?text=UMKMART'">
                     </div>
                     <div class="text-left min-w-0">
                         <h4 class="font-bold text-xs text-slate-800 dark:text-white truncate">{{ $rel->name }}</h4>

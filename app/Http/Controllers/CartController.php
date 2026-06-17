@@ -12,6 +12,7 @@ class CartController extends Controller
 {
     public function index()
     {
+        session()->forget('buy_now');
         $user = Auth::user();
         $cart = Cart::firstOrCreate(['user_id' => $user->id]);
         $cartItems = CartItem::with('product')->where('cart_id', $cart->id)->get();

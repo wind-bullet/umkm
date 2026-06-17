@@ -3,7 +3,7 @@
     <div class="px-6 py-5 border-b border-slate-150 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 flex justify-between items-center transition-colors duration-300">
         <div class="flex items-center gap-2">
             <span class="material-icons text-emerald-600 dark:text-emerald-400">admin_panel_settings</span>
-            <span class="font-extrabold text-lg tracking-wider text-slate-800 dark:text-white">Astrid<span class="text-emerald-600 dark:text-emerald-400">Mart</span></span>
+            <span class="font-extrabold text-lg tracking-wider text-slate-800 dark:text-white">UMK<span class="text-emerald-600 dark:text-emerald-400">MART</span></span>
         </div>
         <div class="md:hidden">
             <button onclick="document.getElementById('mobile-admin-menu').classList.toggle('hidden')" class="text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors">

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Status Pesanan ' . $order->order_code . ' - AstridMart')
+@section('title', 'Status Pesanan ' . $order->order_code . ' - UMKMART')
 
 @section('content')
 <!-- Breadcrumb -->
@@ -132,7 +132,7 @@
                 @foreach($order->items as $item)
                     <div class="flex items-center gap-4">
                         <div class="w-14 h-14 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-900 flex-shrink-0">
-                            <img src="/desain_sample/screen1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100?text=AstridMart'">
+                            <img src="/desain_sample/screen1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100?text=UMKMART'">
                         </div>
                         <div class="min-w-0 flex-grow">
                             <h4 class="font-bold text-xs text-slate-800 dark:text-white truncate">{{ $item->product->name }}</h4>

@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Admin Dashboard - AstridMart')
+@section('title', 'Admin Dashboard - UMKMART')
 @section('page_title', 'Ringkasan Bisnis')
 
 @section('content')
@@ -74,7 +74,7 @@
                 @if($item->product)
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-lg overflow-hidden bg-slate-100 flex-shrink-0">
-                            <img src="/desain_sample/screen1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/50x50?text=AstridMart'">
+                            <img src="/desain_sample/screen1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/50x50?text=UMKMART'">
                         </div>
                         <div class="min-w-0 flex-grow">
                             <h4 class="font-bold text-xs text-slate-800 truncate">{{ $item->product->name }}</h4>

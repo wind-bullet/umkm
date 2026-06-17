@@ -189,7 +189,7 @@ class ChatController extends Controller
             Notification::create([
                 'user_id' => $receiver->id,
                 'title' => 'Pesan Baru dari Admin',
-                'message' => "Admin AstridMart membalas pesan Anda: \"" . Str::limit($request->message_text, 35) . "\"",
+                'message' => "Admin UMKMART membalas pesan Anda: \"" . Str::limit($request->message_text, 35) . "\"",
             ]);
         }
 

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Chat dengan Admin - AstridMart')
+@section('title', 'Chat dengan Admin - UMKMART')
 
 @section('content')
 <h1 class="text-2xl font-extrabold text-slate-800 dark:text-white mb-6 flex items-center gap-2 text-left">
@@ -22,7 +22,7 @@
                     CS
                 </div>
                 <div class="text-left">
-                    <h4 class="font-bold text-xs text-slate-850 dark:text-white">Admin AstridMart</h4>
+                    <h4 class="font-bold text-xs text-slate-850 dark:text-white">Admin UMKMART</h4>
                     <p class="text-[9px] text-emerald-600 dark:text-emerald-400 mt-0.5 flex items-center gap-1">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-ping"></span> Online
                     </p>
@@ -40,7 +40,7 @@
                 CS
             </div>
             <div class="text-left">
-                <h4 class="font-bold text-xs text-slate-850 dark:text-white">Admin AstridMart</h4>
+                <h4 class="font-bold text-xs text-slate-850 dark:text-white">Admin UMKMART</h4>
                 <p class="text-[9px] text-slate-400">Pertanyaan seputar produk & pemesanan</p>
             </div>
         </div>
@@ -88,7 +88,7 @@
                 <div class="my-auto text-center py-8">
                     <span class="material-icons text-slate-300 dark:text-slate-700 text-5xl">chat_bubble_outline</span>
                     <h4 class="font-bold text-xs text-slate-700 dark:text-slate-400 mt-2">Mulai Obrolan</h4>
-                    <p class="text-[10px] text-slate-400 max-w-xs mx-auto mt-1">Kirim pesan pertama Anda ke Admin AstridMart untuk menanyakan seputar produk atau pemesanan.</p>
+                    <p class="text-[10px] text-slate-400 max-w-xs mx-auto mt-1">Kirim pesan pertama Anda ke Admin UMKMART untuk menanyakan seputar produk atau pemesanan.</p>
                 </div>
             @endforelse
         </div>

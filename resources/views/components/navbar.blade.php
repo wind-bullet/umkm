@@ -6,7 +6,7 @@
             <div class="flex items-center gap-8">
                 <a href="{{ route('home') }}" class="flex items-center gap-2 flex-shrink-0">
                     <span class="material-icons text-emerald-600 dark:text-emerald-400 text-2xl md:text-3xl">shopping_basket</span>
-                    <span class="font-extrabold text-xl md:text-2xl tracking-tight text-slate-800 dark:text-white">Astrid<span class="text-emerald-600 dark:text-emerald-400">Mart</span></span>
+                    <span class="font-extrabold text-xl md:text-2xl tracking-tight text-slate-800 dark:text-white">UMK<span class="text-emerald-600 dark:text-emerald-400">MART</span></span>
                 </a>
                 
                 <!-- Desktop Nav Links -->
@@ -134,7 +134,7 @@
                                 el.className = 'flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors';
                                 el.innerHTML = `
                                     <div class="w-10 h-10 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800 flex-shrink-0">
-                                        <img src="/desain_sample/screen1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100?text=AstridMart'">
+                                        <img src="/desain_sample/screen1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100?text=UMKMART'">
                                     </div>
                                     <div class="flex-grow">
                                         <h4 class="text-xs font-bold text-slate-800 dark:text-white truncate">${p.name}</h4>

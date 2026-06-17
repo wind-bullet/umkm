@@ -19,16 +19,51 @@ use Illuminate\Support\Str;
 
 class OrderController extends Controller
 {
+    public function buyNow(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'qty' => 'required|integer|min:1',
+        ]);
+
+        $product = Product::findOrFail($request->product_id);
+        if ($product->stock < $request->qty) {
+            return back()->with('error', 'Stok tidak mencukupi. Stok saat ini: ' . $product->stock);
+        }
+
+        session(['buy_now' => [
+            'product_id' => $request->product_id,
+            'qty' => $request->qty,
+        ]]);
+
+        return redirect()->route('checkout');
+    }
+
     public function checkout()
     {
         $user = Auth::user();
-        $cart = Cart::where('user_id', $user->id)->first();
         
-        if (!$cart || $cart->items()->count() == 0) {
-            return redirect('/cart')->with('error', 'Keranjang belanja Anda masih kosong.');
+        if (session()->has('buy_now')) {
+            $buyNowData = session('buy_now');
+            $product = Product::findOrFail($buyNowData['product_id']);
+            
+            // Construct a mock CartItem object
+            $mockItem = new \stdClass();
+            $mockItem->product_id = $product->id;
+            $mockItem->qty = $buyNowData['qty'];
+            $mockItem->product = $product;
+            
+            $cartItems = collect([$mockItem]);
+        } else {
+            $cart = Cart::where('user_id', $user->id)->first();
+            
+            if (!$cart || $cart->items()->count() == 0) {
+                return redirect('/cart')->with('error', 'Keranjang belanja Anda masih kosong.');
+            }
+
+            $cartItems = CartItem::with('product')->where('cart_id', $cart->id)->get();
         }
 
-        $cartItems = CartItem::with('product')->where('cart_id', $cart->id)->get();
         $shippingOptions = ShippingOption::where('is_active', true)->get();
         $paymentMethods = PaymentMethod::where('is_active', true)->get();
 
@@ -48,13 +83,29 @@ class OrderController extends Controller
         ]);
 
         $user = Auth::user();
-        $cart = Cart::where('user_id', $user->id)->first();
+        
+        $isBuyNow = session()->has('buy_now');
+        $cart = null;
+        if ($isBuyNow) {
+            $buyNowData = session('buy_now');
+            $product = Product::findOrFail($buyNowData['product_id']);
+            
+            $mockItem = new \stdClass();
+            $mockItem->product_id = $product->id;
+            $mockItem->qty = $buyNowData['qty'];
+            $mockItem->product = $product;
+            
+            $cartItems = collect([$mockItem]);
+        } else {
+            $cart = Cart::where('user_id', $user->id)->first();
 
-        if (!$cart || $cart->items()->count() == 0) {
-            return redirect('/cart')->with('error', 'Keranjang belanja Anda masih kosong.');
+            if (!$cart || $cart->items()->count() == 0) {
+                return redirect('/cart')->with('error', 'Keranjang belanja Anda masih kosong.');
+            }
+
+            $cartItems = CartItem::with('product')->where('cart_id', $cart->id)->get();
         }
 
-        $cartItems = CartItem::with('product')->where('cart_id', $cart->id)->get();
         $shippingOption = ShippingOption::findOrFail($request->shipping_option_id);
         $paymentMethod = PaymentMethod::findOrFail($request->payment_method_id);
 
@@ -72,7 +123,8 @@ class OrderController extends Controller
         foreach ($cartItems as $item) {
             // Check stock before ordering
             if ($item->product->stock < $item->qty) {
-                return redirect('/cart')->with('error', "Stok produk {$item->product->name} tidak mencukupi.");
+                $redirectUrl = $isBuyNow ? "/product/{$item->product_id}" : "/cart";
+                return redirect($redirectUrl)->with('error', "Stok produk {$item->product->name} tidak mencukupi.");
             }
             $subtotal += $item->qty * $item->product->price;
         }
@@ -81,7 +133,7 @@ class OrderController extends Controller
         $total = $subtotal + $shippingCost;
         $orderCode = 'ORD-' . date('Ymd') . '-' . strtoupper(Str::random(4));
 
-        DB::transaction(function () use ($user, $orderCode, $subtotal, $shippingCost, $total, $paymentMethod, $shippingOption, $cartItems, $cart, $request, $isDelivery) {
+        DB::transaction(function () use ($user, $orderCode, $subtotal, $shippingCost, $total, $paymentMethod, $shippingOption, $cartItems, $isBuyNow, $cart, $request, $isDelivery) {
             // 1. Create Order
             $order = Order::create([
                 'user_id' => $user->id,
@@ -132,8 +184,6 @@ class OrderController extends Controller
 
                 // Admin notification if stock is running low (< 5)
                 if ($product->stock < 5) {
-                    $adminUser = User::whereHas('orders', function() {}, '!=', 0)->first(); // fallback admin check
-                    // Actually let's query all admin users
                     $adminEmails = \App\Models\AdminEmail::pluck('email')->toArray();
                     $admins = User::whereIn('email', $adminEmails)->get();
                     foreach ($admins as $admin) {
@@ -171,8 +221,14 @@ class OrderController extends Controller
                 ]);
             }
 
-            // 6. Delete Cart Items
-            CartItem::where('cart_id', $cart->id)->delete();
+            // 6. Delete Cart Items OR Forget Buy Now Session
+            if ($isBuyNow) {
+                session()->forget('buy_now');
+            } else {
+                if ($cart) {
+                    CartItem::where('cart_id', $cart->id)->delete();
+                }
+            }
         });
 
         return redirect('/order/' . $orderCode)->with('success', 'Pesanan Anda berhasil dibuat!');

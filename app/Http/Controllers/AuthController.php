@@ -73,7 +73,7 @@ class AuthController extends Controller
         Auth::login($user);
 
         return redirect('/user/dashboard')
-            ->with('success', 'Registrasi berhasil! Selamat datang di AstridMart.');
+            ->with('success', 'Registrasi berhasil! Selamat datang di UMKMART.');
     }
 
     public function logout(Request $request)

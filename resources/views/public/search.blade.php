@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Pencarian: ' . ($q ?: 'Semua Produk') . ' - AstridMart')
+@section('title', 'Pencarian: ' . ($q ?: 'Semua Produk') . ' - UMKMART')
 
 @section('content')
 <!-- Header -->

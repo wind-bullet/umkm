@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Laporan Keuangan - Admin AstridMart')
+@section('title', 'Laporan Keuangan - Admin UMKMART')
 @section('page_title', 'Laporan Arus Keuangan & Transaksi')
 
 @section('content')

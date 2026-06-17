@@ -45,6 +45,7 @@ Route::middleware(['auth'])->group(function () {
     // Checkout & Orders
     Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout');
     Route::post('/checkout', [OrderController::class, 'placeOrder'])->name('checkout.place');
+    Route::post('/buy-now', [OrderController::class, 'buyNow'])->name('buy_now');
     Route::get('/order/{code}', [OrderController::class, 'status'])->name('order.status');
 
     // AJAX API Polling

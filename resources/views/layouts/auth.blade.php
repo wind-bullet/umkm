@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Masuk - AstridMart')</title>
+    <title>@yield('title', 'Masuk - UMKMART')</title>
     
     <!-- Google Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,7 +30,7 @@
         
         <div class="relative z-10 flex items-center gap-2">
             <span class="material-icons text-3xl text-emerald-300">shopping_basket</span>
-            <span class="text-2xl font-bold tracking-tight">AstridMart</span>
+            <span class="text-2xl font-bold tracking-tight text-white">UMK</span><span class="text-2xl font-bold tracking-tight text-emerald-300">MART</span>
         </div>
         
         <div class="relative z-10 my-auto max-w-md">
@@ -43,7 +43,7 @@
         </div>
         
         <div class="relative z-10 text-emerald-300 text-sm">
-            &copy; 2026 AstridMart. Project Prototype E-Commerce UMKM.
+            &copy; 2026 UMKMART. Project Prototype E-Commerce UMKM.
         </div>
     </div>
     
@@ -53,7 +53,7 @@
             <!-- Header for mobile -->
             <div class="flex lg:hidden items-center gap-2 mb-8 justify-center">
                 <span class="material-icons text-3xl text-emerald-600">shopping_basket</span>
-                <span class="text-2xl font-bold text-slate-800">AstridMart</span>
+                <span class="text-2xl font-bold text-slate-800">UMK</span><span class="text-2xl font-bold text-emerald-600">MART</span>
             </div>
             
             @yield('content')

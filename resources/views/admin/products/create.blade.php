@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Tambah Produk Baru - Admin AstridMart')
+@section('title', 'Tambah Produk Baru - Admin UMKMART')
 @section('page_title', 'Tambah Produk Baru')
 
 @section('content')
@@ -14,7 +14,7 @@
             <!-- Nama Produk -->
             <div class="sm:col-span-2">
                 <label for="name" class="block text-xs font-bold text-slate-500 uppercase mb-2">Nama Produk</label>
-                <input type="text" name="name" id="name" value="{{ old('name') }}" required placeholder="Contoh: Kaos Oversize Astrid" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-slate-800">
+                <input type="text" name="name" id="name" value="{{ old('name') }}" required placeholder="Contoh: Kaos Oversize UMKMART" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-slate-800">
                 @error('name')
                     <p class="text-rose-500 text-[10px] font-semibold mt-1">{{ $message }}</p>
                 @enderror

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Profil Saya - AstridMart')
+@section('title', 'Profil Saya - UMKMART')
 
 @section('content')
 <h1 class="text-2xl font-extrabold text-slate-800 dark:text-white mb-6 flex items-center gap-2 text-left">

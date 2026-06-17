@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Produk - Admin AstridMart')
+@section('title', 'Edit Produk - Admin UMKMART')
 @section('page_title', 'Ubah Informasi Produk')
 
 @section('content')
@@ -66,7 +66,7 @@
                     @if($product->image && file_exists(public_path('uploads/products/' . $product->image)))
                         <img src="/uploads/products/{{ $product->image }}" class="w-full h-full object-cover">
                     @else
-                        <img src="/desain_sample/screen1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100?text=AstridMart'">
+                        <img src="/desain_sample/screen1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100?text=UMKMART'">
                     @endif
                 </div>
                 <div>

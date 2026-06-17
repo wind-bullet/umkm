@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Kelola Customer - Admin AstridMart')
+@section('title', 'Kelola Customer - Admin UMKMART')
 @section('page_title', 'Daftar Customer Terdaftar')
 
 @section('content')

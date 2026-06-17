@@ -1,11 +1,11 @@
 @extends('layouts.auth')
 
-@section('title', 'Masuk - AstridMart')
+@section('title', 'Masuk - UMKMART')
 
 @section('content')
 <div class="text-center lg:text-left mb-6">
     <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Selamat Datang</h2>
-    <p class="text-slate-500 mt-2 text-sm">Masuk untuk mulai berbelanja di AstridMart.</p>
+    <p class="text-slate-500 mt-2 text-sm">Masuk untuk mulai berbelanja di UMKMART.</p>
 </div>
 
 @if(session('error'))

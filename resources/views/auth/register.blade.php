@@ -1,11 +1,11 @@
 @extends('layouts.auth')
 
-@section('title', 'Daftar Akun - AstridMart')
+@section('title', 'Daftar Akun - UMKMART')
 
 @section('content')
 <div class="text-center lg:text-left mb-6">
     <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Daftar Akun Baru</h2>
-    <p class="text-slate-500 mt-2 text-sm">Buat akun untuk berbelanja dan melacak pesanan di AstridMart.</p>
+    <p class="text-slate-500 mt-2 text-sm">Buat akun untuk berbelanja dan melacak pesanan di UMKMART.</p>
 </div>
 
 <form action="{{ route('register') }}" method="POST" class="flex flex-col gap-4">

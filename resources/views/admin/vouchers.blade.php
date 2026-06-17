@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Kelola Voucher - Admin AstridMart')
+@section('title', 'Kelola Voucher - Admin UMKMART')
 @section('page_title', 'Kelola Pengaturan Voucher')
 
 @section('content')

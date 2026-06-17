@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard - AstridMart')
+@section('title', 'Dashboard - UMKMART')
 
 @section('content')
 <!-- Welcome Banner -->
@@ -8,7 +8,7 @@
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
             <h1 class="text-2xl font-extrabold text-slate-800 dark:text-white">Halo, {{ Auth::user()->name }}!</h1>
-            <p class="text-xs text-slate-400 mt-1">Selamat datang kembali di panel belanja AstridMart Anda.</p>
+            <p class="text-xs text-slate-400 mt-1">Selamat datang kembali di panel belanja UMKMART Anda.</p>
         </div>
         <div class="flex items-center gap-3">
             <a href="{{ route('user.profile') }}" class="flex items-center gap-1.5 px-4 py-2 bg-slate-100 dark:bg-slate-850 hover:bg-slate-200 dark:hover:bg-slate-800 text-xs font-bold rounded-xl text-slate-600 dark:text-slate-350 transition-colors">
