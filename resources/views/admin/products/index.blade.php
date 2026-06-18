@@ -35,6 +35,47 @@
     </div>
 </div>
 
+<!-- Filter Form -->
+<div class="bg-white border border-slate-150 rounded-2xl p-6 shadow-sm mb-6 text-left">
+    <form action="{{ route('admin.products') }}" method="GET" class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
+        <!-- Search bar -->
+        <div>
+            <label for="q" class="block text-xs font-bold text-slate-400 uppercase mb-2">Cari Nama Produk</label>
+            <input type="text" name="q" id="q" value="{{ request('q') }}" placeholder="Cari..." class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-slate-800">
+        </div>
+        <!-- Category Filter -->
+        <div>
+            <label for="category_id" class="block text-xs font-bold text-slate-400 uppercase mb-2">Kategori</label>
+            <select name="category_id" id="category_id" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-slate-800">
+                <option value="">Semua Kategori</option>
+                @foreach($categories as $cat)
+                    <option value="{{ $cat->id }}" {{ request('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
+                @endforeach
+            </select>
+        </div>
+        <!-- Price Range -->
+        <div class="grid grid-cols-2 gap-2">
+            <div>
+                <label for="min_price" class="block text-xs font-bold text-slate-400 uppercase mb-2">Min Harga</label>
+                <input type="number" name="min_price" id="min_price" value="{{ request('min_price') }}" placeholder="0" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-slate-800">
+            </div>
+            <div>
+                <label for="max_price" class="block text-xs font-bold text-slate-400 uppercase mb-2">Max Harga</label>
+                <input type="number" name="max_price" id="max_price" value="{{ request('max_price') }}" placeholder="100000" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-slate-800">
+            </div>
+        </div>
+        <!-- Buttons -->
+        <div class="flex gap-2">
+            <button type="submit" class="flex-grow bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded-xl text-xs transition-colors shadow-md shadow-emerald-600/10">
+                Filter
+            </button>
+            <a href="{{ route('admin.products') }}" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-2.5 px-4 rounded-xl text-xs transition-colors text-center flex items-center justify-center border border-slate-200">
+                Reset
+            </a>
+        </div>
+    </form>
+</div>
+
 <!-- Products Table Card -->
 <div class="bg-white border border-slate-150 rounded-2xl p-6 shadow-sm text-left">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">

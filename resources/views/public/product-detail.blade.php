@@ -134,6 +134,51 @@
             Ulasan Pelanggan ({{ $product->reviews->count() }})
         </h2>
         
+        @php
+            $canReview = false;
+            if (Auth::check()) {
+                $canReview = \App\Models\Order::where('user_id', Auth::id())
+                    ->where(function($q) {
+                        $q->where('confirmation_requested', true)
+                          ->orWhere('confirmed_received', true);
+                    })
+                    ->whereHas('items', function($q) use ($product) {
+                        $q->where('product_id', $product->id);
+                    })
+                    ->exists();
+            }
+        @endphp
+
+        @if($canReview)
+            <div id="write-review" class="bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-850 p-6 rounded-2xl text-left shadow-sm mb-6">
+                <h3 class="font-bold text-slate-800 dark:text-white text-sm mb-4 pb-2 border-b border-slate-100 dark:border-slate-850 flex items-center gap-1.5">
+                    <span class="material-icons text-emerald-600 dark:text-emerald-400">rate_review</span>
+                    Tulis Ulasan Anda
+                </h3>
+                <form action="{{ route('product.review.store', $product->id) }}" method="POST" class="flex flex-col gap-4">
+                    @csrf
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-2">Rating</label>
+                        <div class="flex items-center gap-1">
+                            @for($i = 1; $i <= 5; $i++)
+                                <input type="radio" name="rating" id="star-{{ $i }}" value="{{ $i }}" class="hidden star-radio" {{ $i === 5 ? 'checked' : '' }}>
+                                <label for="star-{{ $i }}" class="cursor-pointer text-slate-300 dark:text-slate-600 hover:text-amber-400 transition-colors star-label" data-index="{{ $i }}">
+                                    <span class="material-icons text-2xl">star</span>
+                                </label>
+                            @endfor
+                        </div>
+                    </div>
+                    <div>
+                        <label for="review_text" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-2">Ulasan</label>
+                        <textarea name="review_text" id="review_text" rows="3" placeholder="Bagikan pengalaman Anda menggunakan produk ini..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl py-2 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-slate-200"></textarea>
+                    </div>
+                    <button type="submit" class="self-start bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-5 rounded-xl text-xs transition-colors shadow-md shadow-emerald-600/10">
+                        Kirim Ulasan
+                    </button>
+                </form>
+            </div>
+        @endif
+        
         <div class="flex flex-col gap-4">
             @forelse($product->reviews as $review)
                 <div class="bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-850 p-6 rounded-2xl text-left shadow-sm">
@@ -156,7 +201,7 @@
                         </div>
                     </div>
                     
-                    <p class="text-xs text-slate-650 dark:text-slate-350 leading-relaxed">{{ $review->review_text }}</p>
+                    <p class="text-xs text-slate-655 dark:text-slate-350 leading-relaxed">{{ $review->review_text }}</p>
                 </div>
             @empty
                 <div class="bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-850 p-8 rounded-2xl text-center shadow-sm">
@@ -211,5 +256,41 @@
             }
         }
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const starLabels = document.querySelectorAll('.star-label');
+        if (starLabels.length > 0) {
+            starLabels.forEach((label) => {
+                label.addEventListener('click', () => {
+                    const rating = parseInt(label.getAttribute('data-index'));
+                    updateStars(rating);
+                });
+            });
+
+            function updateStars(rating) {
+                starLabels.forEach((label) => {
+                    const idx = parseInt(label.getAttribute('data-index'));
+                    const starIcon = label.querySelector('.material-icons');
+                    if (idx <= rating) {
+                        starIcon.classList.remove('text-slate-350');
+                        starIcon.classList.remove('text-slate-300');
+                        starIcon.classList.remove('dark:text-slate-650');
+                        starIcon.classList.remove('dark:text-slate-600');
+                        starIcon.classList.add('text-amber-400');
+                    } else {
+                        starIcon.classList.remove('text-amber-400');
+                        if (document.documentElement.classList.contains('dark')) {
+                            starIcon.classList.add('text-slate-600');
+                        } else {
+                            starIcon.classList.add('text-slate-300');
+                        }
+                    }
+                });
+            }
+
+            // Set initial state based on checks
+            updateStars(5);
+        }
+    });
 </script>
 @endsection

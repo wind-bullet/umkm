@@ -79,14 +79,38 @@ class AdminController extends Controller
     }
 
     // --- PRODUCTS CRUD ---
-    public function products()
+    public function products(Request $request)
     {
-        $products = Product::with('category')->paginate(10);
+        $query = Product::with('category');
+
+        // Filter by category
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        // Filter by price range
+        if ($request->filled('min_price')) {
+            $query->where('price', '>=', $request->min_price);
+        }
+        if ($request->filled('max_price')) {
+            $query->where('price', '<=', $request->max_price);
+        }
+
+        // Filter by keyword search
+        if ($request->filled('q')) {
+            $q = $request->q;
+            $likeOperator = config('database.default') === 'pgsql' ? 'ILIKE' : 'LIKE';
+            $query->where('name', $likeOperator, "%{$q}%");
+        }
+
+        $products = $query->orderByDesc('created_at')->paginate(10)->withQueryString();
+        
+        $categories = Category::all();
         $totalCount = Product::count();
         $lowStockCount = Product::where('stock', '<', 5)->count();
         $categoryCount = Category::count();
         
-        return view('admin.products.index', compact('products', 'totalCount', 'lowStockCount', 'categoryCount'));
+        return view('admin.products.index', compact('products', 'categories', 'totalCount', 'lowStockCount', 'categoryCount'));
     }
 
     public function createProduct()
@@ -106,6 +130,14 @@ class AdminController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+        $category = Category::findOrFail($request->category_id);
+        if ($category->slug === 'voucher') {
+            $request->validate([
+                'voucher_type' => 'required|string|max:255',
+                'voucher_label' => 'required|string|max:255',
+            ]);
+        }
+
         $data = $request->only(['category_id', 'name', 'description', 'price', 'stock']);
         $data['rating'] = 0.00;
         $data['review_count'] = 0;
@@ -119,14 +151,22 @@ class AdminController extends Controller
             $data['image'] = 'default_product.png';
         }
 
-        Product::create($data);
+        $product = Product::create($data);
+
+        if ($category->slug === 'voucher') {
+            VoucherItem::create([
+                'product_id' => $product->id,
+                'voucher_type' => $request->voucher_type,
+                'voucher_label' => $request->voucher_label,
+            ]);
+        }
 
         return redirect()->route('admin.products')->with('success', 'Produk berhasil ditambahkan.');
     }
 
     public function editProduct($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with('voucherItems')->findOrFail($id);
         $categories = Category::all();
         return view('admin.products.edit', compact('product', 'categories'));
     }
@@ -145,6 +185,14 @@ class AdminController extends Controller
             'is_active' => 'boolean',
         ]);
 
+        $category = Category::findOrFail($request->category_id);
+        if ($category->slug === 'voucher') {
+            $request->validate([
+                'voucher_type' => 'required|string|max:255',
+                'voucher_label' => 'required|string|max:255',
+            ]);
+        }
+
         $data = $request->only(['category_id', 'name', 'description', 'price', 'stock']);
         $data['is_active'] = $request->has('is_active') ? $request->is_active : $product->is_active;
 
@@ -160,6 +208,18 @@ class AdminController extends Controller
         }
 
         $product->update($data);
+
+        if ($category->slug === 'voucher') {
+            VoucherItem::updateOrCreate(
+                ['product_id' => $product->id],
+                [
+                    'voucher_type' => $request->voucher_type,
+                    'voucher_label' => $request->voucher_label,
+                ]
+            );
+        } else {
+            VoucherItem::where('product_id', $product->id)->delete();
+        }
 
         return redirect()->route('admin.products')->with('success', 'Produk berhasil diperbarui.');
     }
@@ -224,6 +284,27 @@ class AdminController extends Controller
         ]);
 
         return back()->with('success', 'Status pesanan berhasil diperbarui.');
+    }
+
+    public function requestOrderConfirmation($id)
+    {
+        $order = Order::findOrFail($id);
+        if ($order->order_status !== 'selesai') {
+            return back()->with('error', 'Status pesanan harus selesai sebelum meminta konfirmasi.');
+        }
+
+        $order->confirmation_requested = true;
+        $order->save();
+
+        // Notify customer
+        Notification::create([
+            'user_id' => $order->user_id,
+            'title' => 'Konfirmasi Penerimaan Barang',
+            'message' => "Pesanan Anda {$order->order_code} sudah dinyatakan selesai oleh penjual. Mohon konfirmasi apakah barang sudah Anda terima dengan baik.",
+            'related_url' => '/user/orders',
+        ]);
+
+        return back()->with('success', 'Notifikasi konfirmasi penerimaan telah dikirim ke customer.');
     }
 
     // --- VOUCHERS MANAGEMENT ---

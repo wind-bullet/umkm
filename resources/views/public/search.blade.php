@@ -25,6 +25,16 @@
             <span class="material-icons text-emerald-600 dark:text-emerald-400">search</span>
             Hasil Pencarian: "{{ $q ?: 'Semua Produk' }}"
         </h1>
+        
+        <!-- Mobile Search Form -->
+        <div class="block md:hidden mt-3">
+            <form action="{{ route('search') }}" method="GET" class="relative">
+                <input type="text" name="q" value="{{ $q }}" placeholder="Cari produk..." class="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-850 rounded-full py-2.5 pl-4 pr-10 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-slate-200">
+                <button type="submit" class="absolute right-3 top-2.5 text-slate-400 hover:text-emerald-600">
+                    <span class="material-icons text-sm">search</span>
+                </button>
+            </form>
+        </div>
     </div>
     
     <!-- Sorting -->

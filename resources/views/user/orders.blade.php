@@ -43,7 +43,21 @@
                             ];
                         @endphp
                         <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-900/10">
-                            <td class="py-4 pl-2 font-bold text-slate-800 dark:text-slate-200">{{ $order->order_code }}</td>
+                            <td class="py-4 pl-2 font-bold text-slate-800 dark:text-slate-200">
+                                <div>{{ $order->order_code }}</div>
+                                <div class="mt-2 flex flex-col gap-1">
+                                    @foreach($order->items as $item)
+                                        <div class="text-[10px] text-slate-550 dark:text-slate-400 font-semibold flex items-center gap-2">
+                                            <span class="truncate max-w-[150px]">{{ $item->product ? $item->product->name : 'Produk Dihapus' }} (x{{ $item->qty }})</span>
+                                            @if($order->confirmation_requested || $order->confirmed_received)
+                                                <a href="{{ route('product.detail', $item->product_id) }}#write-review" class="text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-0.5 font-bold">
+                                                    <span class="material-icons text-[10px]">rate_review</span> Ulas
+                                                </a>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </td>
                             <td class="py-4 text-slate-500">{{ $order->created_at->format('d M Y H:i') }}</td>
                             <td class="py-4 text-slate-600 dark:text-slate-350">{{ $order->delivery_method }}</td>
                             <td class="py-4 text-slate-500">{{ $order->payment_method }}</td>
@@ -54,9 +68,32 @@
                                 </span>
                             </td>
                             <td class="py-4 text-right pr-2">
-                                <a href="{{ route('order.status', $order->order_code) }}" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[10px] font-bold bg-slate-100 dark:bg-slate-850 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-350 transition-colors">
-                                    Detail
-                                </a>
+                                <div class="flex items-center justify-end gap-2">
+                                    <a href="{{ route('order.status', $order->order_code) }}" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[10px] font-bold bg-slate-100 dark:bg-slate-850 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-350 transition-colors">
+                                        Detail
+                                    </a>
+                                    
+                                    @if($order->order_status === 'selesai')
+                                        @if(!$order->confirmed_received)
+                                            @if($order->confirmation_requested)
+                                                <form action="{{ route('user.orders.confirm_received', $order->id) }}" method="POST" class="inline">
+                                                    @csrf
+                                                    <button type="submit" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[10px] font-bold bg-emerald-600 hover:bg-emerald-700 text-white transition-colors shadow-sm" onclick="return confirm('Apakah Anda yakin pesanan sudah diterima?')">
+                                                        <span class="material-icons text-xs">done_all</span> Diterima
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <button disabled class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-[10px] font-bold bg-slate-200 text-slate-400 dark:bg-slate-800 dark:text-slate-600 cursor-not-allowed opacity-50" title="Menunggu konfirmasi admin">
+                                                    <span class="material-icons text-xs">done_all</span> Diterima
+                                                </button>
+                                            @endif
+                                        @else
+                                            <span class="inline-flex items-center gap-0.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/20 px-2 py-1 rounded-lg">
+                                                <span class="material-icons text-xs">check_circle</span> Diterima
+                                            </span>
+                                        @endif
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                     @endforeach
@@ -93,6 +130,21 @@
                             {{ $labels[$order->order_status] ?? $order->order_status }}
                         </span>
                     </div>
+                    
+                    <!-- Mobile items list with review buttons -->
+                    <div class="mt-2 flex flex-col gap-1 text-[11px] bg-slate-100/50 dark:bg-slate-850/25 p-2 rounded-xl">
+                        @foreach($order->items as $item)
+                            <div class="flex justify-between items-center text-slate-650 dark:text-slate-350">
+                                <span class="truncate max-w-[180px]">{{ $item->product ? $item->product->name : 'Produk Dihapus' }} (x{{ $item->qty }})</span>
+                                @if($order->confirmation_requested || $order->confirmed_received)
+                                    <a href="{{ route('product.detail', $item->product_id) }}#write-review" class="text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-0.5 font-bold">
+                                        <span class="material-icons text-[10px]">rate_review</span> Ulas
+                                    </a>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+
                     <hr class="border-slate-100 dark:border-slate-850/50 my-1">
                     <div class="flex justify-between items-center text-xs">
                         <span class="text-slate-550 dark:text-slate-400">Total Belanja</span>
@@ -102,9 +154,33 @@
                         <span class="text-slate-550 dark:text-slate-400">Pengiriman</span>
                         <span class="font-semibold text-slate-700 dark:text-slate-350 text-[10px]">{{ $order->delivery_method }}</span>
                     </div>
-                    <a href="{{ route('order.status', $order->order_code) }}" class="block w-full text-center mt-2 bg-slate-100 dark:bg-slate-850 hover:bg-slate-200 dark:hover:bg-slate-800 text-[10px] font-bold py-2 rounded-xl text-slate-600 dark:text-slate-350 transition-colors">
-                        Lihat Rincian Detail
-                    </a>
+                    
+                    <div class="flex gap-2 mt-2">
+                        <a href="{{ route('order.status', $order->order_code) }}" class="flex-grow text-center bg-slate-100 dark:bg-slate-850 hover:bg-slate-200 dark:hover:bg-slate-800 text-[10px] font-bold py-2 rounded-xl text-slate-600 dark:text-slate-350 transition-colors">
+                            Detail
+                        </a>
+                        
+                        @if($order->order_status === 'selesai')
+                            @if(!$order->confirmed_received)
+                                @if($order->confirmation_requested)
+                                    <form action="{{ route('user.orders.confirm_received', $order->id) }}" method="POST" class="flex-grow">
+                                        @csrf
+                                        <button type="submit" class="w-full text-center bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold py-2 rounded-xl transition-colors shadow-sm" onclick="return confirm('Apakah Anda yakin pesanan sudah diterima?')">
+                                            Diterima
+                                        </button>
+                                    </form>
+                                @else
+                                    <button disabled class="flex-grow text-center bg-slate-200 text-slate-400 dark:bg-slate-800 dark:text-slate-650 text-[10px] font-bold py-2 rounded-xl cursor-not-allowed opacity-50" title="Menunggu konfirmasi admin">
+                                        Diterima
+                                    </button>
+                                @endif
+                            @else
+                                <div class="flex-grow text-center bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold py-2 rounded-xl flex items-center justify-center gap-0.5">
+                                    <span class="material-icons text-xs">check_circle</span> Diterima
+                                </div>
+                            @endif
+                        @endif
+                    </div>
                 </div>
             @endforeach
         </div>

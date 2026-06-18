@@ -297,10 +297,42 @@ class OrderController extends Controller
     public function history()
     {
         $user = Auth::user();
-        $orders = Order::where('user_id', $user->id)
+        $orders = Order::with('items.product')->where('user_id', $user->id)
             ->orderByDesc('created_at')
             ->paginate(10);
 
         return view('user.orders', compact('orders'));
+    }
+
+    public function confirmReceived($id)
+    {
+        $order = Order::with('user')->findOrFail($id);
+        
+        // Ensure only the owner can confirm
+        if (Auth::user()->id !== $order->user_id) {
+            abort(403);
+        }
+        
+        // Check if admin has requested confirmation
+        if (!$order->confirmation_requested) {
+            return back()->with('error', 'Konfirmasi penerimaan belum diizinkan oleh admin.');
+        }
+
+        $order->confirmed_received = true;
+        $order->save();
+
+        // Notify Admins
+        $adminEmails = \App\Models\AdminEmail::pluck('email')->toArray();
+        $admins = User::whereIn('email', $adminEmails)->get();
+        foreach ($admins as $admin) {
+            Notification::create([
+                'user_id' => $admin->id,
+                'title' => 'Pesanan Diterima oleh Customer',
+                'message' => "Customer {$order->user->name} telah mengonfirmasi bahwa pesanan {$order->order_code} sudah diterima.",
+                'related_url' => "/admin/orders?status=selesai",
+            ]);
+        }
+
+        return back()->with('success', 'Pesanan Anda telah berhasil dikonfirmasi sebagai "Diterima". Terima kasih!');
     }
 }

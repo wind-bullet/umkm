@@ -77,10 +77,10 @@
                                     {{ $labels[$order->order_status] ?? $order->order_status }}
                                 </span>
                             </td>
-                            <td class="py-4 text-right pr-2">
+                            <td class="py-4 text-right pr-2 flex items-center justify-end gap-2 min-h-[50px]">
                                 <form action="{{ route('admin.orders.status', $order->id) }}" method="POST" class="inline">
                                     @csrf
-                                    <select name="order_status" onchange="this.form.submit()" class="bg-slate-100 border-none rounded-lg py-1.5 px-2 text-[10px] focus:outline-none text-slate-650 font-bold cursor-pointer">
+                                    <select name="order_status" onchange="this.form.submit()" class="bg-slate-100 dark:bg-slate-800 border-none rounded-lg py-1.5 px-2 text-[10px] focus:outline-none text-slate-650 font-bold cursor-pointer">
                                         <option value="menunggu_pembayaran" {{ $order->order_status == 'menunggu_pembayaran' ? 'selected' : '' }}>Menunggu</option>
                                         <option value="dibayar" {{ $order->order_status == 'dibayar' ? 'selected' : '' }}>Dibayar</option>
                                         <option value="diproses" {{ $order->order_status == 'diproses' ? 'selected' : '' }}>Diproses</option>
@@ -88,6 +88,21 @@
                                         <option value="selesai" {{ $order->order_status == 'selesai' ? 'selected' : '' }}>Selesai</option>
                                     </select>
                                 </form>
+                                
+                                @if($order->order_status === 'selesai')
+                                    @if(!$order->confirmation_requested)
+                                        <form action="{{ route('admin.orders.request_confirmation', $order->id) }}" method="POST" class="inline">
+                                            @csrf
+                                            <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-1.5 px-2.5 rounded-lg text-[9px] transition-colors shadow-sm" title="Kirim Notifikasi Konfirmasi Penerimaan">
+                                                Kirim Konfirmasi
+                                            </button>
+                                        </form>
+                                    @else
+                                        <span class="text-[9px] font-bold text-slate-400 bg-slate-100 dark:bg-slate-800 px-2.5 py-1.5 rounded-lg">
+                                            Sudah Dikirim
+                                        </span>
+                                    @endif
+                                @endif
                             </td>
                         </tr>
                     @endforeach

@@ -49,23 +49,25 @@
         </div>
         
         <!-- Action Buttons -->
-        <div class="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-slate-100 dark:border-slate-850">
+        <div class="grid {{ ($showBuyButton ?? true) ? 'grid-cols-2' : 'grid-cols-1' }} gap-2 mt-2 pt-2 border-t border-slate-100 dark:border-slate-850">
             <a href="{{ route('product.detail', $product->id) }}" class="flex items-center justify-center gap-1 text-[11px] font-bold py-2 rounded-xl text-slate-600 dark:text-slate-350 bg-slate-100 dark:bg-slate-850 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
                 <span class="material-icons text-[12px]">info</span> Detail
             </a>
-            @if($product->stock > 0)
-                <form action="{{ route('cart.add') }}" method="POST" class="w-full">
-                    @csrf
-                    <input type="hidden" name="product_id" value="{{ $product->id }}">
-                    <input type="hidden" name="qty" value="1">
-                    <button type="submit" class="w-full flex items-center justify-center gap-1 text-[11px] font-bold py-2 rounded-xl text-white bg-emerald-600 hover:bg-emerald-700 transition-colors">
-                        <span class="material-icons text-[12px]">shopping_cart</span> Beli
+            @if($showBuyButton ?? true)
+                @if($product->stock > 0)
+                    <form action="{{ route('cart.add') }}" method="POST" class="w-full">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <input type="hidden" name="qty" value="1">
+                        <button type="submit" class="w-full flex items-center justify-center gap-1 text-[11px] font-bold py-2 rounded-xl text-white bg-emerald-600 hover:bg-emerald-700 transition-colors">
+                            <span class="material-icons text-[12px]">shopping_cart</span> Beli
+                        </button>
+                    </form>
+                @else
+                    <button disabled class="w-full flex items-center justify-center gap-1 text-[11px] font-bold py-2 rounded-xl text-slate-400 bg-slate-200 dark:bg-slate-800 cursor-not-allowed">
+                        Habis
                     </button>
-                </form>
-            @else
-                <button disabled class="w-full flex items-center justify-center gap-1 text-[11px] font-bold py-2 rounded-xl text-slate-400 bg-slate-200 dark:bg-slate-800 cursor-not-allowed">
-                    Habis
-                </button>
+                @endif
             @endif
         </div>
     </div>

@@ -34,6 +34,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user/profile', [UserController::class, 'profile'])->name('user.profile');
     Route::post('/user/profile', [UserController::class, 'updateProfile']);
     Route::get('/user/orders', [OrderController::class, 'history'])->name('user.orders');
+    Route::post('/product/{id}/review', [ProductController::class, 'storeReview'])->name('product.review.store');
     Route::get('/user/notifications', [NotificationController::class, 'index'])->name('user.notifications');
     Route::get('/user/chat', [ChatController::class, 'index'])->name('user.chat');
     
@@ -47,6 +48,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/checkout', [OrderController::class, 'checkout'])->name('checkout');
     Route::post('/checkout', [OrderController::class, 'placeOrder'])->name('checkout.place');
     Route::get('/order/{code}', [OrderController::class, 'status'])->name('order.status');
+    Route::post('/user/orders/confirm-received/{id}', [OrderController::class, 'confirmReceived'])->name('user.orders.confirm_received');
 
     // AJAX API Polling
     Route::get('/api/chat/messages', [ChatController::class, 'getMessages']);
@@ -75,6 +77,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Admin Orders
     Route::get('/admin/orders', [AdminController::class, 'orders'])->name('admin.orders');
     Route::post('/admin/orders/status/{id}', [AdminController::class, 'updateOrderStatus'])->name('admin.orders.status');
+    Route::post('/admin/orders/request-confirmation/{id}', [AdminController::class, 'requestOrderConfirmation'])->name('admin.orders.request_confirmation');
     
     // Admin Vouchers
     Route::get('/admin/vouchers', [AdminController::class, 'vouchers'])->name('admin.vouchers');

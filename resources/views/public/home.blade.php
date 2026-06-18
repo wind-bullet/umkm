@@ -61,26 +61,12 @@
     </div>
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         @foreach($featuredProducts->take(4) as $product)
-            @include('components.product-card', ['product' => $product])
+            @include('components.product-card', ['product' => $product, 'showBuyButton' => false])
         @endforeach
     </div>
 </div>
 
-<!-- Promo Banner Section -->
-<div class="rounded-3xl border border-slate-100 dark:border-slate-850 bg-white dark:bg-slate-950 p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 mb-12 shadow-sm">
-    <div class="flex items-center gap-4">
-        <div class="w-16 h-16 rounded-2xl bg-amber-100 dark:bg-amber-950/20 flex items-center justify-center text-amber-600 dark:text-amber-400 flex-shrink-0">
-            <span class="material-icons text-3xl">local_offer</span>
-        </div>
-        <div class="text-left">
-            <h3 class="font-bold text-slate-800 dark:text-white text-lg">Promo Kopi Kenangan & Bioskop XXI</h3>
-            <p class="text-slate-400 dark:text-slate-500 text-xs mt-1">Dapatkan potongan voucher diskon hingga Rp 50.000 hanya di kategori Voucher!</p>
-        </div>
-    </div>
-    <a href="{{ route('category', 'voucher') }}" class="w-full md:w-auto bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-3 px-6 rounded-full text-center transition-colors shadow-lg shadow-amber-500/10">
-        Klaim Voucher
-    </a>
-</div>
+
 
 <!-- Latest Products (Terbaru) -->
 <div id="katalog-section" class="mb-12">
@@ -96,7 +82,7 @@
     </div>
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
         @foreach($latestProducts as $product)
-            @include('components.product-card', ['product' => $product])
+            @include('components.product-card', ['product' => $product, 'showBuyButton' => false])
         @endforeach
     </div>
 </div>

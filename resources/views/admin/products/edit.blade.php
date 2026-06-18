@@ -25,7 +25,7 @@
                 <label for="category_id" class="block text-xs font-bold text-slate-500 uppercase mb-2">Kategori</label>
                 <select name="category_id" id="category_id" required class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-slate-800">
                     @foreach($categories as $cat)
-                        <option value="{{ $cat->id }}" {{ old('category_id', $product->category_id) == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
+                        <option value="{{ $cat->id }}" data-slug="{{ $cat->slug }}" {{ old('category_id', $product->category_id) == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
                     @endforeach
                 </select>
                 @error('category_id')
@@ -58,6 +58,31 @@
                     <option value="1" {{ old('is_active', $product->is_active) ? 'selected' : '' }}>Aktif (Ditampilkan)</option>
                     <option value="0" {{ !old('is_active', $product->is_active) ? 'selected' : '' }}>Non-aktif (Disembunyikan)</option>
                 </select>
+            </div>
+            
+            <!-- Voucher settings (hidden by default) -->
+            @php
+                $voucher = $product->voucherItems->first();
+            @endphp
+            <div class="sm:col-span-2 hidden" id="voucher-fields">
+                <div class="bg-amber-50/20 border border-dashed border-amber-200 p-4 rounded-2xl flex flex-col gap-4">
+                    <h4 class="text-xs font-bold text-amber-700 uppercase flex items-center gap-1">
+                        <span class="material-icons text-sm">confirmation_number</span> Pengaturan Voucher
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="voucher_type" class="block text-xs font-bold text-slate-500 uppercase mb-2">Tipe Potongan</label>
+                            <select name="voucher_type" id="voucher_type" class="w-full bg-white border border-slate-200 rounded-xl py-2 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-slate-800">
+                                <option value="discount_fixed" {{ old('voucher_type', $voucher ? $voucher->voucher_type : '') == 'discount_fixed' ? 'selected' : '' }}>Nominal Tetap (Rupiah)</option>
+                                <option value="discount_percentage" {{ old('voucher_type', $voucher ? $voucher->voucher_type : '') == 'discount_percentage' ? 'selected' : '' }}>Persentase (%)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="voucher_label" class="block text-xs font-bold text-slate-500 uppercase mb-2">Label Voucher</label>
+                            <input type="text" name="voucher_label" id="voucher_label" value="{{ old('voucher_label', $voucher ? $voucher->voucher_label : '') }}" placeholder="Contoh: 10% OFF atau Rp 10.000 OFF" class="w-full bg-white border border-slate-200 rounded-xl py-2 px-3 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-slate-800">
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <!-- Gambar Produk Saat Ini -->
@@ -104,4 +129,30 @@
         </div>
     </form>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const categorySelect = document.getElementById('category_id');
+        const voucherFields = document.getElementById('voucher-fields');
+        
+        function toggleVoucherFields() {
+            if (!categorySelect || !voucherFields) return;
+            const selectedOption = categorySelect.options[categorySelect.selectedIndex];
+            const slug = selectedOption ? selectedOption.getAttribute('data-slug') : '';
+            
+            if (slug === 'voucher') {
+                voucherFields.classList.remove('hidden');
+                document.getElementById('voucher_type').setAttribute('required', 'required');
+                document.getElementById('voucher_label').setAttribute('required', 'required');
+            } else {
+                voucherFields.classList.add('hidden');
+                document.getElementById('voucher_type').removeAttribute('required');
+                document.getElementById('voucher_label').removeAttribute('required');
+            }
+        }
+        
+        categorySelect.addEventListener('change', toggleVoucherFields);
+        toggleVoucherFields();
+    });
+</script>
 @endsection

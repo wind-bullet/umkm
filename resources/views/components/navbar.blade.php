@@ -24,7 +24,7 @@
             <!-- Search Bar (Desktop) -->
             <div class="hidden md:block flex-grow max-w-md relative" id="search-container">
                 <form action="{{ route('search') }}" method="GET" class="relative">
-                    <input type="text" name="q" id="search-input" autocomplete="off" placeholder="Cari kaos, keripik, jam tangan..." class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-full py-2 pl-4 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-slate-200">
+                    <input type="text" name="q" id="search-input" value="{{ request('q') }}" autocomplete="off" placeholder="Cari kaos, keripik, jam tangan..." class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-full py-2 pl-4 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-slate-200">
                     <button type="submit" class="absolute right-3 top-2 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400">
                         <span class="material-icons text-sm">search</span>
                     </button>

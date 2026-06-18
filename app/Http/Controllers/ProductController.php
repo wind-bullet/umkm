@@ -64,11 +64,12 @@ class ProductController extends Controller
         $categories = Category::where('is_active', true)->get();
 
         $query = Product::where('is_active', true);
+        $like = config('database.default') === 'pgsql' ? 'ILIKE' : 'LIKE';
 
         if (!empty($q)) {
-            $query->where(function($sub) use ($q) {
-                $sub->where('name', 'LIKE', "%{$q}%")
-                   ->orWhere('description', 'LIKE', "%{$q}%");
+            $query->where(function($sub) use ($q, $like) {
+                $sub->where('name', $like, "%{$q}%")
+                   ->orWhere('description', $like, "%{$q}%");
             });
         }
 
@@ -109,11 +110,58 @@ class ProductController extends Controller
             return response()->json([]);
         }
 
+        $like = config('database.default') === 'pgsql' ? 'ILIKE' : 'LIKE';
+
         $products = Product::where('is_active', true)
-            ->where('name', 'LIKE', "%{$q}%")
+            ->where('name', $like, "%{$q}%")
             ->take(5)
             ->get(['id', 'name', 'price', 'image']);
 
         return response()->json($products);
+    }
+
+    public function storeReview(Request $request, $id)
+    {
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'review_text' => 'nullable|string|max:1000',
+        ]);
+
+        $product = Product::findOrFail($id);
+        $user = \Illuminate\Support\Facades\Auth::user();
+
+        // Check if eligible (order has confirmation requested or received and contains the product)
+        $eligible = \App\Models\Order::where('user_id', $user->id)
+            ->where(function($query) {
+                $query->where('confirmation_requested', true)
+                      ->orWhere('confirmed_received', true);
+            })
+            ->whereHas('items', function($q) use ($id) {
+                $q->where('product_id', $id);
+            })
+            ->exists();
+
+        if (!$eligible) {
+            return back()->with('error', 'Anda belum diizinkan memberikan ulasan untuk produk ini.');
+        }
+
+        // Create review
+        \App\Models\Review::create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'rating' => $request->rating,
+            'review_text' => $request->review_text,
+        ]);
+
+        // Recalculate average rating and count
+        $avgRating = \App\Models\Review::where('product_id', $product->id)->avg('rating') ?: 0;
+        $reviewCount = \App\Models\Review::where('product_id', $product->id)->count();
+
+        $product->update([
+            'rating' => $avgRating,
+            'review_count' => $reviewCount,
+        ]);
+
+        return back()->with('success', 'Terima kasih atas ulasan Anda!');
     }
 }
