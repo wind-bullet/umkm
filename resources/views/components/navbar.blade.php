@@ -132,9 +132,10 @@
                                 const el = document.createElement('a');
                                 el.href = `/product/${p.id}`;
                                 el.className = 'flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors';
+                                const imgUrl = (p.image && p.image !== 'default_product.png') ? `/uploads/products/${p.image}` : '/desain_sample/screen1.png';
                                 el.innerHTML = `
                                     <div class="w-10 h-10 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800 flex-shrink-0">
-                                        <img src="/desain_sample/screen1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100?text=UMKMART'">
+                                        <img src="${imgUrl}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100?text=UMKMART'">
                                     </div>
                                     <div class="flex-grow">
                                         <h4 class="text-xs font-bold text-slate-800 dark:text-white truncate">${p.name}</h4>

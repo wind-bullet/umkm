@@ -80,6 +80,23 @@
                     </div>
                 </div>
                 
+                <!-- Kategori Filter -->
+                <div>
+                    <h4 class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-3">Kategori</h4>
+                    <div class="flex flex-col gap-2">
+                        @foreach($categories as $cat)
+                            <label class="flex items-center cursor-pointer">
+                                <input type="checkbox" name="categories[]" value="{{ $cat->id }}" 
+                                    {{ is_array(request('categories')) && in_array($cat->id, request('categories')) ? 'checked' : '' }} 
+                                    class="w-4 h-4 rounded border-slate-300 dark:border-slate-850 text-emerald-600 focus:ring-emerald-500">
+                                <span class="ml-2 text-xs font-semibold text-slate-600 dark:text-slate-300">
+                                    {{ $cat->name }}
+                                </span>
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
+                
                 <!-- Rating -->
                 <div>
                     <h4 class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-3">Rating Minimum</h4>
@@ -107,7 +124,7 @@
         @if($products->count() > 0)
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                 @foreach($products as $product)
-                    @include('components.product-card', ['product' => $product])
+                    @include('components.product-card', ['product' => $product, 'showBuyButton' => false])
                 @endforeach
             </div>
             

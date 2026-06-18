@@ -3,22 +3,49 @@
 @section('title', 'Chat Pelanggan - Admin UMKMART')
 @section('page_title', 'Obrolan Customer')
 
+@section('styles')
+<style>
+    @media (min-width: 768px) {
+        body {
+            overflow: hidden !important;
+            height: 100vh !important;
+        }
+        .flex-grow.flex.flex-col.min-h-screen {
+            height: 100vh !important;
+            min-height: 100vh !important;
+            overflow: hidden !important;
+        }
+        main.flex-grow.p-6 {
+            height: calc(100vh - 73px - 53px) !important;
+            overflow: hidden !important;
+            display: flex;
+            flex-direction: column;
+            padding: 24px !important;
+        }
+        .admin-chat-layout {
+            flex-grow: 1;
+            height: 100% !important;
+        }
+    }
+</style>
+@endsection
+
 @section('content')
-<div class="bg-white border border-slate-150 rounded-2xl overflow-hidden shadow-sm flex flex-col md:flex-row h-[520px]">
+<div class="admin-chat-layout bg-white border border-slate-150 rounded-2xl overflow-hidden shadow-sm flex flex-col md:flex-row h-[600px] md:h-[600px]">
     
     <!-- Sidebar Contacts (Left) -->
-    <div class="w-full md:w-80 border-r border-slate-150 flex flex-col bg-slate-50/50">
+    <div class="w-full md:w-80 md:min-w-[320px] md:max-w-[320px] h-[200px] md:h-full border-r border-slate-150 flex flex-col bg-slate-50/50 flex-shrink-0 overflow-hidden">
         <div class="p-4 border-b border-slate-150 font-bold text-xs uppercase text-slate-400 text-left">
             Daftar Percakapan
         </div>
         <!-- Search Contact Box -->
-        <div class="p-3 border-b border-slate-150 bg-white">
+        <div class="p-3 border-b border-slate-150 bg-white flex-shrink-0">
             <div class="relative">
                 <input type="text" id="contact-search-input" placeholder="Cari nama atau telepon..." class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 pl-3 pr-8 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-slate-800">
                 <span class="material-icons absolute right-2.5 top-2.5 text-slate-400 text-sm">search</span>
             </div>
         </div>
-        <div class="flex-grow overflow-y-auto">
+        <div class="flex-grow overflow-y-auto overflow-x-hidden">
             @forelse($contacts as $contact)
                 @php
                     $isActive = $activeContact && $activeContact->id === $contact->id;
@@ -44,7 +71,7 @@
     </div>
     
     <!-- Chat Window (Right) -->
-    <div class="flex-grow flex flex-col h-full bg-white relative">
+    <div class="flex-grow flex flex-col h-[400px] md:h-full overflow-hidden bg-white relative">
         @if($activeContact)
             <!-- Window Header -->
             <div class="px-6 py-4 border-b border-slate-150 flex items-center gap-3 bg-slate-50/20">
@@ -102,7 +129,7 @@
             </div>
             
             <!-- Input Form -->
-            <div class="p-4 border-t border-slate-150 bg-white">
+            <div class="p-4 border-t border-slate-150 bg-white flex-shrink-0">
                 <form id="admin-chat-form" class="flex items-center gap-3">
                     <input type="text" id="admin-chat-input" required autocomplete="off" placeholder="Ketik balasan Anda disini..." class="flex-grow bg-slate-100 border-none rounded-xl py-3 px-4 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-slate-800">
                     <button type="submit" class="w-11 h-11 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center transition-colors flex-shrink-0 shadow-lg shadow-emerald-600/10">

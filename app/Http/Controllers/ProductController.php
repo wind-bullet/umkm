@@ -73,6 +73,11 @@ class ProductController extends Controller
             });
         }
 
+        // Filter by Categories
+        if ($request->filled('categories') && is_array($request->categories)) {
+            $query->whereIn('category_id', $request->categories);
+        }
+
         // Filter by Price Range
         if ($request->filled('min_price')) {
             $query->where('price', '>=', $request->min_price);

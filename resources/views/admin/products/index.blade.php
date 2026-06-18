@@ -82,79 +82,98 @@
         <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
             <span class="material-icons text-emerald-600">list</span> Daftar Produk
         </h3>
-        <a href="{{ route('admin.products.create') }}" class="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-5 rounded-xl text-xs transition-colors shadow-lg shadow-emerald-600/15">
-            <span class="material-icons text-sm">add</span> Tambah Produk Baru
-        </a>
+        <div class="flex flex-wrap gap-2">
+            <button type="button" id="btn-toggle-select" class="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 px-4 rounded-xl text-xs transition-colors border border-slate-200 shadow-sm">
+                <span class="material-icons text-sm">playlist_add_check</span>
+                <span id="btn-select-text">Pilih Produk</span>
+            </button>
+            <button type="button" id="btn-bulk-delete" class="hidden flex items-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-colors shadow-lg shadow-rose-600/15 border border-rose-600 cursor-not-allowed opacity-50" disabled>
+                <span class="material-icons text-sm">delete_sweep</span>
+                <span>Hapus (<span id="selected-count">0</span>) Produk</span>
+            </button>
+            <a href="{{ route('admin.products.create') }}" class="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-5 rounded-xl text-xs transition-colors shadow-lg shadow-emerald-600/15">
+                <span class="material-icons text-sm">add</span> Tambah Produk Baru
+            </a>
+        </div>
     </div>
     
     @if($products->count() > 0)
-        <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-                <thead>
-                    <tr class="text-slate-400 font-bold uppercase border-b border-slate-150">
-                        <th class="pb-3 pl-2">Produk</th>
-                        <th class="pb-3">Kategori</th>
-                        <th class="pb-3">Harga</th>
-                        <th class="pb-3">Stok</th>
-                        <th class="pb-3">Status</th>
-                        <th class="pb-3 text-right pr-2">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100">
-                    @foreach($products as $product)
-                        <tr class="hover:bg-slate-50/50">
-                            <!-- Image & Name -->
-                            <td class="py-4 pl-2 font-bold text-slate-800">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-lg overflow-hidden bg-slate-100 flex-shrink-0">
-                                        <!-- Dynamic uploaded image or sample fallback -->
-                                        @if($product->image && file_exists(public_path('uploads/products/' . $product->image)))
-                                            <img src="/uploads/products/{{ $product->image }}" class="w-full h-full object-cover">
-                                        @else
-                                            <img src="/desain_sample/screen1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100?text=UMKMART'">
-                                        @endif
-                                    </div>
-                                    <span class="truncate max-w-48">{{ $product->name }}</span>
-                                </div>
-                            </td>
-                            <!-- Category -->
-                            <td class="py-4 text-slate-650 font-semibold">
-                                {{ $product->category->name }}
-                            </td>
-                            <!-- Price -->
-                            <td class="py-4 font-black text-slate-850">
-                                Rp {{ number_format($product->price, 0, ',', '.') }}
-                            </td>
-                            <!-- Stock -->
-                            <td class="py-4 font-bold">
-                                <span class="{{ $product->stock < 5 ? 'text-rose-600' : 'text-slate-700' }}">{{ $product->stock }} unit</span>
-                            </td>
-                            <!-- Status -->
-                            <td class="py-4">
-                                <span class="px-2 py-0.5 rounded-full border text-[9px] font-bold 
-                                    {{ $product->is_active ? 'bg-emerald-100 text-emerald-800 border-emerald-200' : 'bg-slate-100 text-slate-500 border-slate-200' }}">
-                                    {{ $product->is_active ? 'Aktif' : 'Non-aktif' }}
-                                </span>
-                            </td>
-                            <!-- Actions -->
-                            <td class="py-4 text-right pr-2">
-                                <div class="flex justify-end gap-1.5">
-                                    <a href="{{ route('admin.products.edit', $product->id) }}" class="p-1.5 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-emerald-50" title="Edit">
-                                        <span class="material-icons text-sm">edit</span>
-                                    </a>
-                                    <form action="{{ route('admin.products.delete', $product->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?')">
-                                        @csrf
-                                        <button type="submit" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50" title="Hapus">
-                                            <span class="material-icons text-sm">delete</span>
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
+        <form id="bulk-delete-form" action="{{ route('admin.products.bulk_delete') }}" method="POST">
+            @csrf
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead>
+                        <tr class="text-slate-400 font-bold uppercase border-b border-slate-150">
+                            <th class="pb-3 pl-2 select-checkbox-col hidden w-10">
+                                <input type="checkbox" id="select-all-checkbox" class="rounded border-slate-350 text-emerald-600 focus:ring-emerald-500">
+                            </th>
+                            <th class="pb-3 pl-2">Produk</th>
+                            <th class="pb-3">Kategori</th>
+                            <th class="pb-3">Harga</th>
+                            <th class="pb-3">Stok</th>
+                            <th class="pb-3">Status</th>
+                            <th class="pb-3 text-right pr-2">Aksi</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        @foreach($products as $product)
+                            <tr class="hover:bg-slate-50/50">
+                                <td class="py-4 pl-2 select-checkbox-col hidden w-10">
+                                    <input type="checkbox" name="ids[]" value="{{ $product->id }}" class="product-select-checkbox rounded border-slate-350 text-emerald-600 focus:ring-emerald-500">
+                                </td>
+                                <!-- Image & Name -->
+                                <td class="py-4 pl-2 font-bold text-slate-800">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-lg overflow-hidden bg-slate-100 flex-shrink-0">
+                                            <!-- Dynamic uploaded image or sample fallback -->
+                                            @if($product->image && file_exists(public_path('uploads/products/' . $product->image)))
+                                                <img src="/uploads/products/{{ $product->image }}" class="w-full h-full object-cover">
+                                            @else
+                                                <img src="/desain_sample/screen1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100?text=UMKMART'">
+                                            @endif
+                                        </div>
+                                        <span class="truncate max-w-48">{{ $product->name }}</span>
+                                    </div>
+                                </td>
+                                <!-- Category -->
+                                <td class="py-4 text-slate-650 font-semibold">
+                                    {{ $product->category->name }}
+                                </td>
+                                <!-- Price -->
+                                <td class="py-4 font-black text-slate-850">
+                                    Rp {{ number_format($product->price, 0, ',', '.') }}
+                                </td>
+                                <!-- Stock -->
+                                <td class="py-4 font-bold">
+                                    <span class="{{ $product->stock < 5 ? 'text-rose-600' : 'text-slate-700' }}">{{ $product->stock }} unit</span>
+                                </td>
+                                <!-- Status -->
+                                <td class="py-4">
+                                    <span class="px-2 py-0.5 rounded-full border text-[9px] font-bold 
+                                        {{ $product->is_active ? 'bg-emerald-100 text-emerald-800 border-emerald-200' : 'bg-slate-100 text-slate-500 border-slate-200' }}">
+                                        {{ $product->is_active ? 'Aktif' : 'Non-aktif' }}
+                                    </span>
+                                </td>
+                                <!-- Actions -->
+                                <td class="py-4 text-right pr-2">
+                                    <div class="flex justify-end gap-1.5">
+                                        <a href="{{ route('admin.products.edit', $product->id) }}" class="p-1.5 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-emerald-50" title="Edit">
+                                            <span class="material-icons text-sm">edit</span>
+                                        </a>
+                                        <form action="{{ route('admin.products.delete', $product->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?')">
+                                            @csrf
+                                            <button type="submit" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50" title="Hapus">
+                                                <span class="material-icons text-sm">delete</span>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </form>
         
         <div class="mt-6">
             {{ $products->links() }}
@@ -166,4 +185,80 @@
         </div>
     @endif
 </div>
+@endsection
+
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const btnToggleSelect = document.getElementById('btn-toggle-select');
+    const btnBulkDelete = document.getElementById('btn-bulk-delete');
+    const btnSelectText = document.getElementById('btn-select-text');
+    const selectCheckboxCols = document.querySelectorAll('.select-checkbox-col');
+    const selectAllCheckbox = document.getElementById('select-all-checkbox');
+    const productCheckboxes = document.querySelectorAll('.product-select-checkbox');
+    const selectedCountSpan = document.getElementById('selected-count');
+    const bulkDeleteForm = document.getElementById('bulk-delete-form');
+    
+    let selectMode = false;
+    
+    btnToggleSelect.addEventListener('click', function() {
+        selectMode = !selectMode;
+        if (selectMode) {
+            // Enter select mode
+            btnSelectText.textContent = 'Batal';
+            btnToggleSelect.classList.remove('bg-slate-100', 'text-slate-700', 'hover:bg-slate-200');
+            btnToggleSelect.classList.add('bg-slate-600', 'text-white', 'hover:bg-slate-700');
+            btnBulkDelete.classList.remove('hidden');
+            selectCheckboxCols.forEach(col => col.classList.remove('hidden'));
+        } else {
+            // Exit select mode
+            btnSelectText.textContent = 'Pilih Produk';
+            btnToggleSelect.classList.add('bg-slate-100', 'text-slate-700', 'hover:bg-slate-200');
+            btnToggleSelect.classList.remove('bg-slate-600', 'text-white', 'hover:bg-slate-700');
+            btnBulkDelete.classList.add('hidden');
+            selectCheckboxCols.forEach(col => col.classList.add('hidden'));
+            
+            // Clear selections
+            selectAllCheckbox.checked = false;
+            productCheckboxes.forEach(cb => cb.checked = false);
+            updateSelectionState();
+        }
+    });
+    
+    selectAllCheckbox.addEventListener('change', function() {
+        productCheckboxes.forEach(cb => {
+            cb.checked = selectAllCheckbox.checked;
+        });
+        updateSelectionState();
+    });
+    
+    productCheckboxes.forEach(cb => {
+        cb.addEventListener('change', function() {
+            const allChecked = Array.from(productCheckboxes).every(c => c.checked);
+            selectAllCheckbox.checked = allChecked;
+            updateSelectionState();
+        });
+    });
+    
+    function updateSelectionState() {
+        const checkedCount = Array.from(productCheckboxes).filter(c => c.checked).length;
+        selectedCountSpan.textContent = checkedCount;
+        
+        if (checkedCount > 0) {
+            btnBulkDelete.removeAttribute('disabled');
+            btnBulkDelete.classList.remove('cursor-not-allowed', 'opacity-50');
+        } else {
+            btnBulkDelete.setAttribute('disabled', 'disabled');
+            btnBulkDelete.classList.add('cursor-not-allowed', 'opacity-50');
+        }
+    }
+    
+    btnBulkDelete.addEventListener('click', function() {
+        const checkedCount = Array.from(productCheckboxes).filter(c => c.checked).length;
+        if (checkedCount > 0 && confirm('Apakah Anda yakin ingin menghapus ' + checkedCount + ' produk yang dipilih?')) {
+            bulkDeleteForm.submit();
+        }
+    });
+});
+</script>
 @endsection

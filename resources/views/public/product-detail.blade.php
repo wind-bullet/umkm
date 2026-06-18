@@ -222,7 +222,11 @@
             @forelse($relatedProducts as $rel)
                 <a href="{{ route('product.detail', $rel->id) }}" class="flex items-center gap-3 p-3 bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-850 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
                     <div class="w-16 h-16 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-900 flex-shrink-0">
-                        <img src="/desain_sample/screen1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100?text=UMKMART'">
+                        @if($rel->image && file_exists(public_path('uploads/products/' . $rel->image)))
+                            <img src="/uploads/products/{{ $rel->image }}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100?text=UMKMART'">
+                        @else
+                            <img src="/desain_sample/screen1.png" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100?text=UMKMART'">
+                        @endif
                     </div>
                     <div class="text-left min-w-0">
                         <h4 class="font-bold text-xs text-slate-800 dark:text-white truncate">{{ $rel->name }}</h4>

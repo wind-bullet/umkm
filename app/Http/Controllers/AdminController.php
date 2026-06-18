@@ -238,6 +238,25 @@ class AdminController extends Controller
         return redirect()->route('admin.products')->with('success', 'Produk berhasil dihapus.');
     }
 
+    public function bulkDeleteProducts(Request $request)
+    {
+        $ids = $request->input('ids');
+        if (empty($ids) || !is_array($ids)) {
+            return redirect()->route('admin.products')->with('error', 'Tidak ada produk yang dipilih.');
+        }
+
+        $products = Product::whereIn('id', $ids)->get();
+        foreach ($products as $product) {
+            // Delete image if exists
+            if ($product->image && $product->image != 'default_product.png' && file_exists(public_path('uploads/products/' . $product->image))) {
+                @unlink(public_path('uploads/products/' . $product->image));
+            }
+            $product->delete();
+        }
+
+        return redirect()->route('admin.products')->with('success', 'Produk yang dipilih berhasil dihapus.');
+    }
+
     // --- ORDERS MANAGEMENT ---
     public function orders(Request $request)
     {

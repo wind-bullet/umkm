@@ -2,20 +2,42 @@
 
 @section('title', 'Chat dengan Admin - UMKMART')
 
+@section('styles')
+<style>
+    @media (min-width: 768px) {
+        body {
+            overflow: hidden !important;
+            height: 100vh !important;
+        }
+        main.flex-grow {
+            height: calc(100vh - 80px - 82px) !important;
+            overflow: hidden !important;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 0 !important;
+        }
+        .user-chat-layout {
+            flex-grow: 1;
+            height: 100% !important;
+        }
+    }
+</style>
+@endsection
+
 @section('content')
 <h1 class="text-2xl font-extrabold text-slate-800 dark:text-white mb-6 flex items-center gap-2 text-left">
     <span class="material-icons text-emerald-600 dark:text-emerald-400">forum</span>
     Layanan Chat Pelanggan
 </h1>
 
-<div class="bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-850 rounded-3xl overflow-hidden shadow-sm flex flex-col md:flex-row h-[500px]">
+<div class="user-chat-layout bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-850 rounded-3xl overflow-hidden shadow-sm flex flex-col md:flex-row h-[600px] md:h-[600px]">
     
     <!-- Sidebar Contact (Left) -->
-    <div class="w-full md:w-80 border-r border-slate-100 dark:border-slate-850 flex flex-col bg-slate-50/50 dark:bg-slate-950">
-        <div class="p-4 border-b border-slate-100 dark:border-slate-850 font-bold text-xs uppercase text-slate-400 text-left">
+    <div class="w-full md:w-80 md:min-w-[320px] md:max-w-[320px] h-[120px] md:h-full border-r border-slate-100 dark:border-slate-850 flex flex-col bg-slate-50/50 dark:bg-slate-950 flex-shrink-0 overflow-hidden">
+        <div class="p-4 border-b border-slate-100 dark:border-slate-850 font-bold text-xs uppercase text-slate-400 text-left flex-shrink-0">
             Customer Service
         </div>
-        <div class="flex-grow overflow-y-auto">
+        <div class="flex-grow overflow-y-auto overflow-x-hidden">
             <!-- Active Contact Item -->
             <div class="flex items-center gap-3 p-4 bg-emerald-50/30 dark:bg-emerald-950/10 border-l-4 border-emerald-600">
                 <div class="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-400 font-bold flex items-center justify-center">
@@ -32,7 +54,7 @@
     </div>
     
     <!-- Chat Window (Right) -->
-    <div class="flex-grow flex flex-col h-full bg-white dark:bg-slate-950 relative">
+    <div class="flex-grow flex flex-col h-[480px] md:h-full overflow-hidden bg-white dark:bg-slate-950 relative">
         
         <!-- Window Header -->
         <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-850 flex items-center gap-3 bg-slate-50/20 dark:bg-slate-900/10">
@@ -94,7 +116,7 @@
         </div>
         
         <!-- Input Form -->
-        <div class="p-4 border-t border-slate-100 dark:border-slate-850 bg-white dark:bg-slate-950">
+        <div class="p-4 border-t border-slate-100 dark:border-slate-850 bg-white dark:bg-slate-950 flex-shrink-0">
             <form id="chat-send-form" class="flex items-center gap-3">
                 <input type="text" id="chat-message-input" required autocomplete="off" placeholder="Ketik pesan Anda disini..." class="flex-grow bg-slate-100 dark:bg-slate-900 border-none rounded-xl py-3 px-4 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 text-slate-800 dark:text-white">
                 <button type="submit" class="w-11 h-11 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center transition-colors flex-shrink-0 shadow-lg shadow-emerald-600/10">
