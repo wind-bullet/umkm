@@ -14,14 +14,19 @@ class ChatController extends Controller
 {
     private function checkDatabaseMigration()
     {
-        if (!\Illuminate\Support\Facades\Schema::hasColumn('messages', 'image')) {
-            try {
+        try {
+            if (!\Illuminate\Support\Facades\Schema::hasColumn('messages', 'image')) {
                 \Illuminate\Support\Facades\Schema::table('messages', function (\Illuminate\Database\Schema\Blueprint $table) {
                     $table->string('image')->nullable();
                 });
-            } catch (\Exception $e) {
-                // Ignore failure if applied
             }
+            
+            // Try to make message_text nullable dynamically
+            \Illuminate\Support\Facades\Schema::table('messages', function (\Illuminate\Database\Schema\Blueprint $table) {
+                $table->text('message_text')->nullable()->change();
+            });
+        } catch (\Exception $e) {
+            // Ignore failure if applied
         }
     }
 
@@ -162,6 +167,7 @@ class ChatController extends Controller
     // Send message (AJAX)
     public function sendMessage(Request $request)
     {
+        $this->checkDatabaseMigration();
         $request->validate([
             'receiver_id' => 'required|exists:users,id',
             'message_text' => 'required_without:chat_image|nullable|string',
